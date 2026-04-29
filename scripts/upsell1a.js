@@ -179,7 +179,7 @@ const UPSELL_NEXT_PAGE_SLUG = "1/order/en/us/upsell1b";
 function getNextPageSlugForRedirect() {
   const normalize = (value) => {
     if (!value) return "";
-    return value.startsWith("/") ? value : "/" + value;
+    return value.startsWith("/69ebce6f41ef3510f7bd1202-preview") ? value : (value.startsWith("/") ? "/69ebce6f41ef3510f7bd1202-preview" + value : "/69ebce6f41ef3510f7bd1202-preview/" + value);
   };
   if (UPSELL_NEXT_PAGE_SLUG) return normalize(UPSELL_NEXT_PAGE_SLUG);
   return "/";
@@ -660,7 +660,7 @@ const processKlarnaUpsell = async () => {
         body: JSON.stringify({
           offers: offers.map((o) => JSON.stringify(o)),
           order_id: lastOrderId,
-          pageId: "f5BJmK7i9N2nH3eGkmtMTKJEvF_oHkLqnKJCLy8cT7ztPmpY5YAlBI4Mn_ZTPtB4"
+          pageId: "aL6AXm0NNjaIDdxeGUlDbddYjx-A4LUgLwuTdxQOJNq7Ea0WsYHBHgcFC5QeytBo"
         })
       }
     );
@@ -740,7 +740,7 @@ const processUpsell = async () => {
   }
   try {
     const orderData = JSON.parse(sessionStorage.getItem("orderData"));
-    orderData.pageId = "f5BJmK7i9N2nH3eGkmtMTKJEvF_oHkLqnKJCLy8cT7ztPmpY5YAlBI4Mn_ZTPtB4";
+    orderData.pageId = "aL6AXm0NNjaIDdxeGUlDbddYjx-A4LUgLwuTdxQOJNq7Ea0WsYHBHgcFC5QeytBo";
     const lastOrderId = sessionStorage.getItem("cms_oid");
     const stripePayment = JSON.parse(sessionStorage.getItem("stripePayment"));
     const isStripeTestOrder = stripePayment && !stripePayment.isLive;
