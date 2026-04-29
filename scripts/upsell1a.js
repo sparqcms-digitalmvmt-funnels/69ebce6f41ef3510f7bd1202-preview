@@ -59,6 +59,32 @@ const getVrioCampaignInfoBasedOnPaymentMethod = (isVipUpsell) => {
 ;
 const isVipUpsell = true;
 const { vrioCampaignId, countries, integrationId } = getVrioCampaignInfoBasedOnPaymentMethod(isVipUpsell);
+const CURRENCY = "USD";
+
+const CURRENCY_LOCALE_MAP = {
+  USD: 'en-US',
+  EUR: 'de-DE',
+  GBP: 'en-GB',
+  AUD: 'en-AU',
+};
+const LOCALE = getLocaleFromCurrency(CURRENCY);
+
+function getLocaleFromCurrency(currencyCode) {
+  const code = (currencyCode || '').toUpperCase();
+  if (code && CURRENCY_LOCALE_MAP[code]) return CURRENCY_LOCALE_MAP[code];
+  return navigator.language || 'en-US';
+};
+
+function formatPrice(amount, suffix = '') {
+  const formatted = new Intl.NumberFormat(LOCALE, {
+    style: 'currency',
+    currency: CURRENCY.toUpperCase(),
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+  return `${formatted}${suffix}`;
+};
+
 
 const i18n = {
   "iso2": "US",
@@ -634,7 +660,7 @@ const processKlarnaUpsell = async () => {
         body: JSON.stringify({
           offers: offers.map((o) => JSON.stringify(o)),
           order_id: lastOrderId,
-          pageId: "AdpqKE2HzrzSN0pVGFVrKpeDxALQRmhbTyoE_c7EOvZ6oH2AZXBQrydHVWMRERdI"
+          pageId: "f5BJmK7i9N2nH3eGkmtMTKJEvF_oHkLqnKJCLy8cT7ztPmpY5YAlBI4Mn_ZTPtB4"
         })
       }
     );
@@ -714,7 +740,7 @@ const processUpsell = async () => {
   }
   try {
     const orderData = JSON.parse(sessionStorage.getItem("orderData"));
-    orderData.pageId = "AdpqKE2HzrzSN0pVGFVrKpeDxALQRmhbTyoE_c7EOvZ6oH2AZXBQrydHVWMRERdI";
+    orderData.pageId = "f5BJmK7i9N2nH3eGkmtMTKJEvF_oHkLqnKJCLy8cT7ztPmpY5YAlBI4Mn_ZTPtB4";
     const lastOrderId = sessionStorage.getItem("cms_oid");
     const stripePayment = JSON.parse(sessionStorage.getItem("stripePayment"));
     const isStripeTestOrder = stripePayment && !stripePayment.isLive;
