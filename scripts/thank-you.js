@@ -145,7 +145,16 @@ const i18n = {
   "labels": {
     "noStatesAvailable": "No States or Provinces Available for this Country",
     "selectState": "Select state",
-    "phoneSearchPlaceholder": "Search"
+    "phoneSearchPlaceholder": "Search",
+    "processing": "Processing...",
+    "close": "Close",
+    "cvvModalTitle": "Where is my security code?",
+    "cvvCardBack": "Back of card",
+    "cvvCardFront": "Front of card",
+    "cvvThreeDigitLabel": "3-digit CVV number",
+    "cvvFourDigitLabel": "4-digit CVV number",
+    "cvvBackDescription": "The 3-digit security code (CVV) is printed on the back of your card, to the right of the signature strip.",
+    "cvvFrontDescription": "American Express cards have a 4-digit code on the front."
   }
 };
 
@@ -286,7 +295,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const endpoint =
     `orders?order_id=${orderids.join(",")}` +
-    `&with=order_offers,customer_address_billing,customer_address_shipping,customer,transactions,cart&pageId=bDcV-hO8qZe34_5CP2NIL6brSSwsyqxhMMTcW-xEdrw59-JH7mveJ0V1dkoGyod6`
+    `&with=order_offers,customer_address_billing,customer_address_shipping,customer,transactions,cart&pageId=N9HohVb2mBrC4mrcyYh15Mk3VESC8l4PuAwOtIe8ubwSrWH9JmPlHmcuzReGHCso`
 
   const response = await fetch(
     `https://app-cms-api-proxy-prod-001.azurewebsites.net/vrio/${endpoint}`,

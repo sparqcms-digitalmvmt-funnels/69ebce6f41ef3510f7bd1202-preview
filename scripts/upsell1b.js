@@ -156,7 +156,16 @@ const i18n = {
   "labels": {
     "noStatesAvailable": "No States or Provinces Available for this Country",
     "selectState": "Select state",
-    "phoneSearchPlaceholder": "Search"
+    "phoneSearchPlaceholder": "Search",
+    "processing": "Processing...",
+    "close": "Close",
+    "cvvModalTitle": "Where is my security code?",
+    "cvvCardBack": "Back of card",
+    "cvvCardFront": "Front of card",
+    "cvvThreeDigitLabel": "3-digit CVV number",
+    "cvvFourDigitLabel": "4-digit CVV number",
+    "cvvBackDescription": "The 3-digit security code (CVV) is printed on the back of your card, to the right of the signature strip.",
+    "cvvFrontDescription": "American Express cards have a 4-digit code on the front."
   }
 };
 
@@ -904,7 +913,7 @@ const processKlarnaUpsell = async () => {
         body: JSON.stringify({
           offers: offers.map((o) => JSON.stringify(o)),
           order_id: lastOrderId,
-          pageId: "y477175EiwQ4TPaOX1e2UOQqmQPzKbV3DK-6cneoR65ODZXPO3VWsA5DP2ysp2Jr"
+          pageId: "D4LACzu4VrcRO2Yq5KMAyNALeJlh-XoscYt2ijLOSsAgiA0QrcrKdMQgWDt89uN4"
         })
       }
     );
@@ -984,7 +993,7 @@ const processUpsell = async () => {
   }
   try {
     const orderData = JSON.parse(sessionStorage.getItem("orderData"));
-    orderData.pageId = "y477175EiwQ4TPaOX1e2UOQqmQPzKbV3DK-6cneoR65ODZXPO3VWsA5DP2ysp2Jr";
+    orderData.pageId = "D4LACzu4VrcRO2Yq5KMAyNALeJlh-XoscYt2ijLOSsAgiA0QrcrKdMQgWDt89uN4";
     const lastOrderId = sessionStorage.getItem("cms_oid");
     const stripePayment = JSON.parse(sessionStorage.getItem("stripePayment"));
     const isStripeTestOrder = stripePayment && !stripePayment.isLive;
@@ -1180,6 +1189,57 @@ const areAllProductsRecurring = () => {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  
+(function ensurePreloaderExists() {
+    if (document.querySelector('[data-preloader]')) return;
+    const loaderOverlay = document.createElement('div');
+    loaderOverlay.setAttribute('data-preloader', '');
+    loaderOverlay.innerHTML = `
+        <div class="loader"></div>
+        <p>${i18n.labels.processing}</p>
+    `;
+
+    const loaderStyles = `
+        [data-preloader] {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 9999;
+        }
+        [data-preloader] .loader {
+            width: 48px;
+            height: 48px;
+            border-bottom-color: transparent !important;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            margin-top: 22px;
+            border: 5px solid rgb(18, 76, 117);
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    `;
+    document.head.insertAdjacentHTML('beforeend', `<style>${loaderStyles}</style>`);
+    document.body.appendChild(loaderOverlay);
+})();
+
   
 if (typeof validateAndSendToKlaviyo === "function") {
   try {

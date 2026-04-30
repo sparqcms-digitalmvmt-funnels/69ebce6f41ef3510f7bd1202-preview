@@ -246,7 +246,16 @@ const i18n = {
   "labels": {
     "noStatesAvailable": "No States or Provinces Available for this Country",
     "selectState": "Select state",
-    "phoneSearchPlaceholder": "Search"
+    "phoneSearchPlaceholder": "Search",
+    "processing": "Processing...",
+    "close": "Close",
+    "cvvModalTitle": "Where is my security code?",
+    "cvvCardBack": "Back of card",
+    "cvvCardFront": "Front of card",
+    "cvvThreeDigitLabel": "3-digit CVV number",
+    "cvvFourDigitLabel": "4-digit CVV number",
+    "cvvBackDescription": "The 3-digit security code (CVV) is printed on the back of your card, to the right of the signature strip.",
+    "cvvFrontDescription": "American Express cards have a 4-digit code on the front."
   }
 };
 
@@ -605,7 +614,7 @@ async function createOrderViaWallet(confirmationToken, paymentMethodId) {
         ?.getAttribute("data-shipping-profile-id") || undefined;
 
   const orderData = {
-    pageId: "RJj759cA8BvppTkJlx4HaElSaYKM0ZjOFjO7iOB7VhZjgv2fcXVUJKpGzBjBu-ES",
+    pageId: "nOZMx_GwZilXSM-f950dNbZCLHAqAvxC_t050JSl9e2CuPtx_DdRsulTcPNbSzXz",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
@@ -1393,7 +1402,7 @@ async function createOrderViaPaypal(isExpress = false) {
   const shippingProfileId = +document.querySelector(`[data-product-id="${selectedProduct.id}"]`)?.getAttribute('data-shipping-profile-id') || undefined;
   const sameAddress = isSameAddress();
   const orderData = {
-    pageId: "RJj759cA8BvppTkJlx4HaElSaYKM0ZjOFjO7iOB7VhZjgv2fcXVUJKpGzBjBu-ES",
+    pageId: "nOZMx_GwZilXSM-f950dNbZCLHAqAvxC_t050JSl9e2CuPtx_DdRsulTcPNbSzXz",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -1692,7 +1701,7 @@ async function createOrderViaKlarna() {
   const sameAddress = isSameAddress();
 
   const orderData = {
-    pageId: "RJj759cA8BvppTkJlx4HaElSaYKM0ZjOFjO7iOB7VhZjgv2fcXVUJKpGzBjBu-ES",
+    pageId: "nOZMx_GwZilXSM-f950dNbZCLHAqAvxC_t050JSl9e2CuPtx_DdRsulTcPNbSzXz",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
     email: email,
@@ -2070,7 +2079,7 @@ async function createOrderViaCreditCard() {
   let orderTotal = Math.max(0, Number(selectedProduct.price) * selectedProduct.quantity);
 
   const orderData = {
-    pageId: "RJj759cA8BvppTkJlx4HaElSaYKM0ZjOFjO7iOB7VhZjgv2fcXVUJKpGzBjBu-ES",
+    pageId: "nOZMx_GwZilXSM-f950dNbZCLHAqAvxC_t050JSl9e2CuPtx_DdRsulTcPNbSzXz",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -2753,8 +2762,58 @@ const populateCountries = (countryEl) => {
   }
 };
 
-// After the DOM is loaded, we can start to interact with the elements
 document.addEventListener("DOMContentLoaded", async () => {
+  
+(function ensurePreloaderExists() {
+    if (document.querySelector('[data-preloader]')) return;
+    const loaderOverlay = document.createElement('div');
+    loaderOverlay.setAttribute('data-preloader', '');
+    loaderOverlay.innerHTML = `
+        <div class="loader"></div>
+        <p>${i18n.labels.processing}</p>
+    `;
+
+    const loaderStyles = `
+        [data-preloader] {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 9999;
+        }
+        [data-preloader] .loader {
+            width: 48px;
+            height: 48px;
+            border-bottom-color: transparent !important;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            margin-top: 22px;
+            border: 5px solid rgb(18, 76, 117);
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    `;
+    document.head.insertAdjacentHTML('beforeend', `<style>${loaderStyles}</style>`);
+    document.body.appendChild(loaderOverlay);
+})();
+
   try {
     initVrioWallets();
   } catch (error) {
@@ -3986,7 +4045,7 @@ async function returnPaypal() {
 ;
 
     const body = {
-        pageId: "RJj759cA8BvppTkJlx4HaElSaYKM0ZjOFjO7iOB7VhZjgv2fcXVUJKpGzBjBu-ES",
+        pageId: "nOZMx_GwZilXSM-f950dNbZCLHAqAvxC_t050JSl9e2CuPtx_DdRsulTcPNbSzXz",
         action: "process",
         campaign_id: CAMPAIGN_ID,
         connection_id: 1,
