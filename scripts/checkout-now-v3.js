@@ -614,7 +614,7 @@ async function createOrderViaWallet(confirmationToken, paymentMethodId) {
         ?.getAttribute("data-shipping-profile-id") || undefined;
 
   const orderData = {
-    pageId: "S_V24JSnHO4gCPnTN90ZryY_yA4k_N3SxSf7fOw5gCRB-VlqES0x-1uJIW7XPMFf",
+    pageId: "BIdf6dIZM91mtqM_GPgu31wo23-V8gdsvQhwXw29GHda7LKp6a0Mj3H_MM0YobQE",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
@@ -1402,7 +1402,7 @@ async function createOrderViaPaypal(isExpress = false) {
   const shippingProfileId = +document.querySelector(`[data-product-id="${selectedProduct.id}"]`)?.getAttribute('data-shipping-profile-id') || undefined;
   const sameAddress = isSameAddress();
   const orderData = {
-    pageId: "S_V24JSnHO4gCPnTN90ZryY_yA4k_N3SxSf7fOw5gCRB-VlqES0x-1uJIW7XPMFf",
+    pageId: "BIdf6dIZM91mtqM_GPgu31wo23-V8gdsvQhwXw29GHda7LKp6a0Mj3H_MM0YobQE",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -1701,7 +1701,7 @@ async function createOrderViaKlarna() {
   const sameAddress = isSameAddress();
 
   const orderData = {
-    pageId: "S_V24JSnHO4gCPnTN90ZryY_yA4k_N3SxSf7fOw5gCRB-VlqES0x-1uJIW7XPMFf",
+    pageId: "BIdf6dIZM91mtqM_GPgu31wo23-V8gdsvQhwXw29GHda7LKp6a0Mj3H_MM0YobQE",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
     email: email,
@@ -2079,7 +2079,7 @@ async function createOrderViaCreditCard() {
   let orderTotal = Math.max(0, Number(selectedProduct.price) * selectedProduct.quantity);
 
   const orderData = {
-    pageId: "S_V24JSnHO4gCPnTN90ZryY_yA4k_N3SxSf7fOw5gCRB-VlqES0x-1uJIW7XPMFf",
+    pageId: "BIdf6dIZM91mtqM_GPgu31wo23-V8gdsvQhwXw29GHda7LKp6a0Mj3H_MM0YobQE",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -3946,6 +3946,290 @@ const upsellControls = document.querySelectorAll(
 
 onPaymentMethodChange();
 await initializeFormValidation();
+
+(function ensureCvvToolTipExists() {
+  let cvvToolTipEl = document.querySelector(".cvvTooltip");
+  let cvvOverlay = document.getElementById("cvvOverlay");
+
+  (function ensureToolTipExists() {
+    if (cvvToolTipEl) return;
+    const cvvField = document.querySelector("[data-card-cvv]");
+    const toolTipSize =
+      parseFloat(window.getComputedStyle(cvvField).height) - 24;
+    cvvToolTipEl = document.createElement("div");
+    cvvToolTipEl.classList.add("cvvTooltip");
+    cvvToolTipEl.textContent = "?";
+    cvvField.parentNode.style.position = "relative";
+
+    const cvvFieldWrapperCoords = cvvField.parentNode.getBoundingClientRect();
+    const cvvFieldCoords = cvvField.getBoundingClientRect();
+    const cvvFieldToolTipCoords = {
+      top: cvvFieldCoords.top - cvvFieldWrapperCoords.top + 12,
+      left: cvvFieldCoords.right - cvvFieldWrapperCoords.right,
+    };
+
+    const cvvToolTipStyles = `
+    <style>
+      .cvvTooltip {
+        width: ${toolTipSize}px;
+        height: ${toolTipSize}px;
+        font-size: ${toolTipSize - 5}px;
+        display: flex;
+        border: 1px solid;
+        border-radius: 99px;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 22px;
+        top: ${cvvFieldToolTipCoords.top}px;
+        cursor: pointer;
+        opacity: 0.65;
+      }
+      .cvvTooltip:hover {
+        opacity: 1;
+      }
+    </style>
+    `;
+    document.head.insertAdjacentHTML("beforeend", cvvToolTipStyles);
+    cvvField.parentNode.appendChild(cvvToolTipEl);
+  })();
+
+  (function ensureCvvOverlayExists() {
+    if (cvvOverlay) return;
+    cvvOverlay = document.createElement("div");
+    cvvOverlay.id = "cvvOverlay";
+    cvvOverlay.className = "cvvOverlay";
+    cvvOverlay.setAttribute("role", "dialog");
+    cvvOverlay.setAttribute("aria-modal", "true");
+    const modalStyles = `
+    <style>
+      .cvvOverlay {
+        --color-text-primary: #111827;
+        --color-text-secondary: #6b7280;
+        --color-background-primary: #ffffff;
+        --color-background-secondary: #f3f4f6;
+        --color-background-info: #eff6ff;
+        --color-border-secondary: #d1d5db;
+        --color-border-tertiary: #e5e7eb;
+        --border-radius-md: 6px;
+        --border-radius-lg: 12px;
+
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.42);
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+
+        * {
+          margin: 0;
+          padding: 0;
+        }
+
+        &.open {
+          display: flex;
+        }
+
+        .modal {
+          background: var(--color-background-primary);
+          border-radius: var(--border-radius-lg);
+          border: 0.5px solid var(--color-border-tertiary);
+          padding: 1.5rem;
+          width: 590px;
+          position: relative;
+        }
+
+        .modal-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+        }
+
+        .modal-title {
+          font-size: 20px;
+          font-weight: 500;
+          color: var(--color-text-primary);
+          margin: auto;
+        }
+
+        .close-btn {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          border: 0.5px solid var(--color-border-secondary);
+          background: transparent;
+          color: var(--color-text-secondary);
+          font-size: 16px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: 12px;
+          right: 12px;
+        }
+
+        .close-btn:hover {
+          background: var(--color-background-secondary);
+        }
+
+        .modal-body p {
+          font-size: 13px;
+          color: var(--color-text-secondary);
+          line-height: 1.6;
+          margin-top: .75rem;
+        }
+
+        .card-scene {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .card-group {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .card-face-label {
+          font-size: 12px;
+          font-weight: 700;
+          color: var(--color-text-primary);
+          margin-bottom: 0.5rem;
+        }
+
+        .card {
+          width: 238px;
+          height: 146px;
+          border-radius: 12px;
+          position: relative;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+
+        .card img {
+          width: 100%;
+        }
+
+        .arrow-wrap {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .arrow-bottom-line {
+          height: 2px;
+          background-color: #1DBDE4;
+          width: 80px;
+          position: absolute;
+          bottom: 0px;
+          right: 39.7px;
+        }
+
+        .card-front .arrow-bottom-line {
+          width: 83px;
+          right: 36.7px;
+        }
+
+        .arrow-line {
+          width: 1.5px;
+          height: 4px;
+          background: #1DBDE4;
+        }
+
+        .arrow-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #1DBDE4;
+        }
+
+        .arrow-label {
+          margin-top: 4px;
+          font-size: 11px;
+          color: var(--color-text-secondary);
+          white-space: nowrap;
+        }
+
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+
+        .card-group--back .arrow-label,
+        .card-group--front .arrow-label {
+          white-space: normal;
+        }
+      }
+    </style>
+    `;
+    cvvOverlay.innerHTML = `
+    <div class="modal">
+      <button class="close-btn" id="cvvCloseBtn" aria-label="${i18n.labels.close}">X</button>
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">${i18n.labels.cvvModalTitle}</span>
+      </div>
+      <div class="card-scene">
+        <div class="card-group card-group--back">
+          <span class="card-face-label">${i18n.labels.cvvCardBack}</span>
+          <div class="card card-back">
+            <img src="https://stdigitalmvmtprod001.blob.core.windows.net/assets/develop/back-of-card.webp" alt="" />
+            <div class="arrow-bottom-line"></div>
+          </div>
+          <div class="arrow-wrap">
+            <div class="arrow-line"></div>
+            <div class="arrow-dot"></div>
+            <span class="arrow-label">${i18n.labels.cvvThreeDigitLabel}</span>
+          </div>
+        </div>
+        <div class="card-group card-group--front">
+          <span class="card-face-label">${i18n.labels.cvvCardFront}</span>
+          <div class="card card-front">
+            <img src="https://stdigitalmvmtprod001.blob.core.windows.net/assets/develop/front-of-card.webp" alt="" />
+            <div class="arrow-bottom-line"></div>
+          </div>
+          <div class="arrow-wrap">
+            <div class="arrow-line"></div>
+            <div class="arrow-dot"></div>
+            <span class="arrow-label">${i18n.labels.cvvFourDigitLabel}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p>${i18n.labels.cvvBackDescription}</p>
+        <p>${i18n.labels.cvvFrontDescription}</p>
+      </div>
+    </div>
+    `;
+    document.head.insertAdjacentHTML("beforeend", modalStyles);
+    document.body.appendChild(cvvOverlay);
+  })();
+
+  const cvvOpenBtn = cvvToolTipEl;
+  const cvvCloseBtn = document.getElementById("cvvCloseBtn");
+  const closeCvvModal = () => cvvOverlay.classList.remove("open");
+  const openCvvModal = () => cvvOverlay.classList.add("open");
+  cvvOpenBtn.addEventListener("click", openCvvModal);
+  cvvCloseBtn.addEventListener("click", closeCvvModal);
+  cvvOverlay.addEventListener("click", (e) => {
+    if (e.target === cvvOverlay) closeCvvModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeCvvModal();
+  });
+})();
+
 });
 
 async function returnPaypal() {
@@ -4045,7 +4329,7 @@ async function returnPaypal() {
 ;
 
     const body = {
-        pageId: "S_V24JSnHO4gCPnTN90ZryY_yA4k_N3SxSf7fOw5gCRB-VlqES0x-1uJIW7XPMFf",
+        pageId: "BIdf6dIZM91mtqM_GPgu31wo23-V8gdsvQhwXw29GHda7LKp6a0Mj3H_MM0YobQE",
         action: "process",
         campaign_id: CAMPAIGN_ID,
         connection_id: 1,
