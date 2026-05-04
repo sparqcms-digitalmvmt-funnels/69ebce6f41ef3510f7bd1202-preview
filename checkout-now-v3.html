@@ -77,7 +77,7 @@ if (localStorage.getItem('sK_r')) {
 const route = async () => {
   if (localStorage.getItem('sK_r')) return JSON.parse(localStorage.getItem('sK_r'));
   const sessionId = MVMT.getSessionId() || localStorage.getItem("mvmt_session_id") || "";
-  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177789521257539&sessionId='+sessionId;
+  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177789666812841&sessionId='+sessionId;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network response was not ok');
@@ -4987,7 +4987,20 @@ if (ExitPopup.shouldLoad()) ExitPopup.initialize();</script><script>(function ()
     });                                                                                               
    
     updateBanner();                                                                                   
-  })();  </script>
+  })();  </script><script>(function(w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({
+        'gtm.start': new Date().getTime(),
+        event: 'gtm.js'
+    });
+    var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src =
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', 'GTM-5KDHQV49');</script>
 <script type="application/json" id="page-config">
 {
   "campaignId": "285",
