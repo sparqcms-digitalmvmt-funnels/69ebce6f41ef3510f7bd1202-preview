@@ -77,7 +77,7 @@ if (localStorage.getItem('sK_r')) {
 const route = async () => {
   if (localStorage.getItem('sK_r')) return JSON.parse(localStorage.getItem('sK_r'));
   const sessionId = MVMT.getSessionId() || localStorage.getItem("mvmt_session_id") || "";
-  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177791206356820&sessionId='+sessionId;
+  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177791273730391&sessionId='+sessionId;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network response was not ok');
@@ -3699,7 +3699,8 @@ display: none !important;
     -webkit-box-shadow: 0 0 5px #6f6f6f;
     box-shadow: 0 0 5px #6f6f6f;
    border-radius: 20px;
-   max-width:min-content;
+   /* max-width:min-content; */
+  max-width: min(340px, calc(100vw - 20px));
     width: 100% 
 }
 .w_item {
@@ -3787,10 +3788,10 @@ display: none !important;
     -webkit-transform: translateY(-120%);
 }
 }
-@media(max-width:404px) {
-    .w_fomo_wrapper {
+@media(max-width:320px) {
+    .w_fomo_wrapper{
        min-width: 300px;
-       max-width: 340px;
+       max-width: 300px;
    }
 }
 .buyopt
