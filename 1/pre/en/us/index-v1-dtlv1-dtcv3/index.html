@@ -77,7 +77,7 @@ if (localStorage.getItem('sK_r')) {
 const route = async () => {
   if (localStorage.getItem('sK_r')) return JSON.parse(localStorage.getItem('sK_r'));
   const sessionId = MVMT.getSessionId() || localStorage.getItem("mvmt_session_id") || "";
-  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177757741554017&sessionId='+sessionId;
+  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177789312425772&sessionId='+sessionId;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network response was not ok');
@@ -227,11 +227,11 @@ document.addEventListener("DOMContentLoaded", async() => {
   
   </script>
 <script>
-  const offerName = ', Vital Shoulder Massager, Vital Shoulder Massager';
+  const offerName = 'Vital Shoulder Massager, Vital Shoulder Massager';
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
     'event': 'pageView', 
-    'offer': ', Vital Shoulder Massager, Vital Shoulder Massager',
+    'offer': 'Vital Shoulder Massager, Vital Shoulder Massager',
     'customer_id':sessionStorage.getItem("customerId") || undefined,
     'page':{
       'type':'Presell',
