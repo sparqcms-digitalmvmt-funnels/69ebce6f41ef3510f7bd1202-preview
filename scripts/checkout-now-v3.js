@@ -614,7 +614,7 @@ async function createOrderViaWallet(confirmationToken, paymentMethodId) {
         ?.getAttribute("data-shipping-profile-id") || undefined;
 
   const orderData = {
-    pageId: "82tRRc6_sBUCboHsY6gH2RVsTrd2HYSD0KqFrRDJrJjwdLMj0z7xG5RQhkWh9yQ_",
+    pageId: "wFh7v9m5e3ryQmZOWsOfSipdiSAgi0X0OpzCQ-RUmbyFptj2H-4jH-vkiHiqjfH-",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
@@ -2046,7 +2046,7 @@ async function createOrderViaPaypal(isExpress = false) {
   const shippingProfileId = +document.querySelector(`[data-product-id="${selectedProduct.id}"]`)?.getAttribute('data-shipping-profile-id') || undefined;
   const sameAddress = isSameAddress();
   const orderData = {
-    pageId: "82tRRc6_sBUCboHsY6gH2RVsTrd2HYSD0KqFrRDJrJjwdLMj0z7xG5RQhkWh9yQ_",
+    pageId: "wFh7v9m5e3ryQmZOWsOfSipdiSAgi0X0OpzCQ-RUmbyFptj2H-4jH-vkiHiqjfH-",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -2346,7 +2346,7 @@ async function createOrderViaKlarna() {
   const sameAddress = isSameAddress();
 
   const orderData = {
-    pageId: "82tRRc6_sBUCboHsY6gH2RVsTrd2HYSD0KqFrRDJrJjwdLMj0z7xG5RQhkWh9yQ_",
+    pageId: "wFh7v9m5e3ryQmZOWsOfSipdiSAgi0X0OpzCQ-RUmbyFptj2H-4jH-vkiHiqjfH-",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
     email: email,
@@ -2725,7 +2725,7 @@ async function createOrderViaCreditCard() {
   let orderTotal = Math.max(0, Number(selectedProduct.price) * selectedProduct.quantity);
 
   const orderData = {
-    pageId: "82tRRc6_sBUCboHsY6gH2RVsTrd2HYSD0KqFrRDJrJjwdLMj0z7xG5RQhkWh9yQ_",
+    pageId: "wFh7v9m5e3ryQmZOWsOfSipdiSAgi0X0OpzCQ-RUmbyFptj2H-4jH-vkiHiqjfH-",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -5060,7 +5060,7 @@ async function returnPaypal() {
 ;
 
     const body = {
-        pageId: "82tRRc6_sBUCboHsY6gH2RVsTrd2HYSD0KqFrRDJrJjwdLMj0z7xG5RQhkWh9yQ_",
+        pageId: "wFh7v9m5e3ryQmZOWsOfSipdiSAgi0X0OpzCQ-RUmbyFptj2H-4jH-vkiHiqjfH-",
         action: "process",
         campaign_id: CAMPAIGN_ID,
         connection_id: 1,
@@ -5337,6 +5337,7 @@ const createCart = async (sanitizedOrderData) => {
         offers: sanitizedOrderData.offers,
         campaign_id: CAMPAIGN_ID,
         connection_id: sanitizedOrderData.connection_id,
+        pageId: sanitizedOrderData.pageId,
       }),
       keepalive: false,
     }
