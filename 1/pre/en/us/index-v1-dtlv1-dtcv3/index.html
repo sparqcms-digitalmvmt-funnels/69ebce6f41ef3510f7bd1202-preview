@@ -77,7 +77,7 @@ if (localStorage.getItem('sK_r')) {
 const route = async () => {
   if (localStorage.getItem('sK_r')) return JSON.parse(localStorage.getItem('sK_r'));
   const sessionId = MVMT.getSessionId() || localStorage.getItem("mvmt_session_id") || "";
-  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177981826905891&sessionId='+sessionId;
+  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177981854594799&sessionId='+sessionId;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network response was not ok');
@@ -2566,7 +2566,7 @@ document.addEventListener("DOMContentLoaded", async() => {
   const locale = "en-US";
   const todayDate = new Date();
 
-  function formatWithOrdinal(date, locale) {
+  function formatMMDDYYYY(date, locale) {
     const day = date.getDate();
     const month = new Intl.DateTimeFormat(locale, { month: "numeric" }).format(date);
 
@@ -2585,10 +2585,10 @@ document.addEventListener("DOMContentLoaded", async() => {
   }
 
   document.querySelectorAll("[data-ship-date]").forEach((el) => {
-    el.textContent = formatMMDDYYYY(todayDate, locale);
+    el.textContent = formatWithOrdinal(todayDate, locale);
   });
   document.querySelectorAll("[data-updated-date]").forEach((el) => {
-    el.textContent = formatWithOrdinal(todayDate, locale);
+    el.textContent = formatMMDDYYYY(todayDate, locale);
   });
 });</script><script>var s = document.createElement('script');
 s.src = 'https://www.mxj5trk.com/scripts/main.js';
