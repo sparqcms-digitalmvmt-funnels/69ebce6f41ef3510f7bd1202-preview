@@ -614,7 +614,7 @@ async function createOrderViaWallet(confirmationToken, paymentMethodId) {
         ?.getAttribute("data-shipping-profile-id") || undefined;
 
   const orderData = {
-    pageId: "UaKkgCcI3XqmiMN139xbq_0cjyjYVsObBiEU9xPaJ5ubdRoTfzaUSNKBXSqdDHE0",
+    pageId: "sZuzH5D9bKUahCAApR8eKRI-Nrr2GQC-z0RgXX1TYDRSe1IhHxawG6N1zHrkeSxq",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
@@ -970,6 +970,7 @@ function getOrCreateErrorElement() {
   if (submitBtn && submitBtn.parentNode) {
     el = document.createElement("div");
     el.setAttribute("data-general-error", "");
+    el.setAttribute("data-testid", "general-error");
     el.style.cssText = "background:#fee2e2;border:1px solid #ef4444;color:#b91c1c;padding:12px 16px;border-radius:6px;margin-bottom:12px;font-size:14px;display:none;";
     submitBtn.parentNode.insertBefore(el, submitBtn);
     return el;
@@ -993,6 +994,7 @@ function getOrCreatePaymentErrorElement() {
   if (paymentContainer && paymentContainer.parentNode) {
     el = document.createElement("div");
     el.setAttribute("data-payment-error", "");
+    el.setAttribute("data-testid", "payment-error");
     el.style.cssText = "background:#fee2e2;border:1px solid #ef4444;color:#b91c1c;padding:12px 16px;border-radius:6px;margin-bottom:12px;font-size:14px;display:none;";
     paymentContainer.parentNode.insertBefore(el, paymentContainer);
     return el;
@@ -1965,7 +1967,7 @@ function getInPurchaseUpsells() {
             DEFAULT_OFFER_ID,
           item_id: Number(product.dataset.productId),
           order_offer_quantity:
-            Number(product.getAttribute("data-product-quantity")) || 1
+            Number(product.getAttribute("data-non-shippable-quantity") || product.getAttribute("data-product-quantity")) || 1
         };
       }
       const isInput = product.tagName.toLowerCase() === "input";
@@ -2046,7 +2048,7 @@ async function createOrderViaPaypal(isExpress = false) {
   const shippingProfileId = +document.querySelector(`[data-product-id="${selectedProduct.id}"]`)?.getAttribute('data-shipping-profile-id') || undefined;
   const sameAddress = isSameAddress();
   const orderData = {
-    pageId: "UaKkgCcI3XqmiMN139xbq_0cjyjYVsObBiEU9xPaJ5ubdRoTfzaUSNKBXSqdDHE0",
+    pageId: "sZuzH5D9bKUahCAApR8eKRI-Nrr2GQC-z0RgXX1TYDRSe1IhHxawG6N1zHrkeSxq",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -2346,7 +2348,7 @@ async function createOrderViaKlarna() {
   const sameAddress = isSameAddress();
 
   const orderData = {
-    pageId: "UaKkgCcI3XqmiMN139xbq_0cjyjYVsObBiEU9xPaJ5ubdRoTfzaUSNKBXSqdDHE0",
+    pageId: "sZuzH5D9bKUahCAApR8eKRI-Nrr2GQC-z0RgXX1TYDRSe1IhHxawG6N1zHrkeSxq",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
     email: email,
@@ -2725,7 +2727,7 @@ async function createOrderViaCreditCard() {
   let orderTotal = Math.max(0, Number(selectedProduct.price) * selectedProduct.quantity);
 
   const orderData = {
-    pageId: "UaKkgCcI3XqmiMN139xbq_0cjyjYVsObBiEU9xPaJ5ubdRoTfzaUSNKBXSqdDHE0",
+    pageId: "sZuzH5D9bKUahCAApR8eKRI-Nrr2GQC-z0RgXX1TYDRSe1IhHxawG6N1zHrkeSxq",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -3496,11 +3498,22 @@ const populateCountries = (countryEl) => {
 document.addEventListener("DOMContentLoaded", async () => {
   
 (function ensurePreloaderExists() {
-    if (document.querySelector('[data-preloader]')) return;
+    const existing = document.querySelector('[data-preloader]');
+    if (existing) {
+        if (!existing.getAttribute('data-testid')) {
+            existing.setAttribute('data-testid', 'preloader');
+        }
+        const spinner = existing.querySelector('.loader');
+        if (spinner && !spinner.getAttribute('data-testid')) {
+            spinner.setAttribute('data-testid', 'preloader-spinner');
+        }
+        return;
+    }
     const loaderOverlay = document.createElement('div');
     loaderOverlay.setAttribute('data-preloader', '');
+    loaderOverlay.setAttribute('data-testid', 'preloader');
     loaderOverlay.innerHTML = `
-        <div class="loader"></div>
+        <div class="loader" data-testid="preloader-spinner"></div>
         <p>${i18n.labels.processing}</p>
     `;
 
@@ -4689,6 +4702,7 @@ await initializeFormValidation();
       parseFloat(window.getComputedStyle(cvvField).height) - 24;
     cvvToolTipEl = document.createElement("div");
     cvvToolTipEl.classList.add("cvvTooltip");
+    cvvToolTipEl.setAttribute("data-testid", "button-cvv-tooltip");
     cvvToolTipEl.textContent = "?";
     cvvField.parentNode.style.position = "relative";
 
@@ -4732,6 +4746,9 @@ await initializeFormValidation();
     cvvOverlay.className = "cvvOverlay";
     cvvOverlay.setAttribute("role", "dialog");
     cvvOverlay.setAttribute("aria-modal", "true");
+    cvvOverlay.role = "dialog";
+    cvvOverlay.ariaModal = "true";
+    cvvOverlay.setAttribute("data-testid", "modal-cvv");
     const modalStyles = `
     <style>
       .cvvOverlay {
@@ -4907,7 +4924,7 @@ await initializeFormValidation();
     `;
     cvvOverlay.innerHTML = `
     <div class="modal">
-      <button class="close-btn" id="cvvCloseBtn" aria-label="${i18n.labels.close}">X</button>
+      <button class="close-btn" id="cvvCloseBtn" data-testid="button-modal-cvv-close" aria-label="${i18n.labels.close}">X</button>
       <div class="modal-header">
         <span class="modal-title" id="modalTitle">${i18n.labels.cvvModalTitle}</span>
       </div>
@@ -5060,7 +5077,7 @@ async function returnPaypal() {
 ;
 
     const body = {
-        pageId: "UaKkgCcI3XqmiMN139xbq_0cjyjYVsObBiEU9xPaJ5ubdRoTfzaUSNKBXSqdDHE0",
+        pageId: "sZuzH5D9bKUahCAApR8eKRI-Nrr2GQC-z0RgXX1TYDRSe1IhHxawG6N1zHrkeSxq",
         action: "process",
         campaign_id: CAMPAIGN_ID,
         connection_id: 1,
@@ -5143,6 +5160,7 @@ async function returnPaypal() {
         offer_id: getVrioOfferIdByProductId(product.item_id) ?? DEFAULT_OFFER_ID,
         item_id: Number(product.item_id),
         order_offer_quantity: product.order_offer_quantity,
+        ...(product.mainOffer ? { mainOffer: true } : {}),
       });
     });
 
@@ -5291,6 +5309,7 @@ const showToast = function(message, bg = "#333") {
     (() => {
       const div = document.createElement("div");
       div.id = "toast-container";
+      div.setAttribute("data-testid", "toast-container");
       div.style.position = "fixed";
       div.style.top = "10px";
       div.style.right = "10px";
@@ -5301,6 +5320,7 @@ const showToast = function(message, bg = "#333") {
 
   const toast = document.createElement("div");
   toast.className = "mytoast";
+  toast.setAttribute("data-testid", "toast");
   toast.textContent = message;
   toast.style.background = bg;
   toast.style.color = "#fff";
@@ -5523,6 +5543,7 @@ function handleFreeGiftParam(allProducts) {
         discountSpan = document.createElement('span');
         discountSpan.className = 'discount-percentage';
         discountSpan.style = 'white-space: nowrap !important;';
+        discountSpan.setAttribute('data-testid', 'discount-percentage');
         container.appendChild(discountSpan);
       }
 
@@ -5635,17 +5656,20 @@ function handleFreeGiftParam(allProducts) {
         itemContainer.style.alignItems = 'center';
         itemContainer.style.width = '100%';
         itemContainer.style.gap = '10px';
+        itemContainer.setAttribute('data-testid', 'summary-item');
 
         const itemDetails = document.createElement('div');
         itemDetails.style.display = 'flex';
         itemDetails.style.gap = '5px';
         itemDetails.style.alignItems = 'center';
         itemDetails.style.flex = '1';
+        itemDetails.setAttribute('data-testid', 'summary-name');
 
         const priceElement = document.createElement('div');
         priceElement.style.fontWeight = 'bold';
         priceElement.style.minWidth = '70px';
         priceElement.style.textAlign = 'right';
+        priceElement.setAttribute('data-testid', 'summary-price-unit');
         let customName = ""
         productsElements.forEach((el) => {
           if (el.dataset.productId == currentProduct.id) customName = el.dataset.customProductName;
@@ -5691,6 +5715,7 @@ function handleFreeGiftParam(allProducts) {
               checked: checkbox ? checkbox.checked : true,
               quantity:
                 Number(
+                  activeOptionProduct.getAttribute("data-non-shippable-quantity") ||
                   activeOptionProduct.getAttribute("data-product-quantity")
                 ) || 1
             });
@@ -5741,14 +5766,17 @@ function handleFreeGiftParam(allProducts) {
         itemContainer.style.alignItems = 'center';
         itemContainer.style.width = '100%';
         itemContainer.style.gap = '10px';
+        itemContainer.setAttribute('data-testid', 'summary-item');
 
         const itemDetails = document.createElement('div');
         itemDetails.style.display = 'flex';
         itemDetails.style.gap = '5px';
         itemDetails.style.alignItems = 'center';
+        itemDetails.setAttribute('data-testid', 'summary-name');
 
         const priceElement = document.createElement('div');
         priceElement.style.fontWeight = 'bold';
+        priceElement.setAttribute('data-testid', 'summary-price-unit');
         itemDetails.innerHTML = `
           <div style="flex: 1; display: flex; gap: 5px; align-items: center;">
               ${productObject.quantity > 1 ? `<span>${productObject.quantity}x</span>` : ''}
@@ -5772,6 +5800,7 @@ function handleFreeGiftParam(allProducts) {
         noItemsMessage.textContent = '';
         noItemsMessage.style.textAlign = 'center';
         noItemsMessage.style.width = '100%';
+        noItemsMessage.setAttribute('data-testid', 'summary-empty');
         summaryList.appendChild(noItemsMessage);
       }
 
@@ -5828,6 +5857,21 @@ function handleFreeGiftParam(allProducts) {
               id: foundProduct.id || 0,
               price: unitPrices[index],
             };
+
+            const cardTextMatch = (card.textContent || '').match(/(\d+)\s*%\s*off/i);
+            const discountPct = Number(card.getAttribute('data-product-discount')) || Number(foundProduct.discountPercentage) || (cardTextMatch ? Number(cardTextMatch[1]) : 0);
+            if (discountPct) {
+              document.querySelectorAll('.mvmt-discount-amount').forEach((el) => {
+                if (/^\d+$/.test((el.textContent || '').trim())) {
+                  el.textContent = String(discountPct);
+                }
+              });
+              document.querySelectorAll('[data-url-param-timer] span').forEach((el) => {
+                if (el.textContent && /\d+%\s*discount/i.test(el.textContent)) {
+                  el.textContent = el.textContent.replace(/\d+(?=%\s*discount)/i, String(discountPct));
+                }
+              });
+            }
           }
         }
 

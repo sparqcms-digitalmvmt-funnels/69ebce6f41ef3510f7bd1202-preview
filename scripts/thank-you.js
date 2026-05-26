@@ -1008,12 +1008,13 @@ const elementsMappingContent = {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+  try {
   applyKlarnaVisibilityForThankYou();
   const orderids = JSON.parse(sessionStorage.getItem("orderids"));
 
   const endpoint =
     `orders?order_id=${orderids.join(",")}` +
-    `&with=order_offers,customer_address_billing,customer_address_shipping,customer,transactions,cart&pageId=MiEmlfe6CwCEjrlqYM4xeJ05bExttB6Jcwr-NsCD3WRwnCPWyY6m7eSpdgCGp3JT`
+    `&with=order_offers,customer_address_billing,customer_address_shipping,customer,transactions,cart&pageId=oaK7D5reSer1nI-4f-GQe17NjRTkRA0SEZQ7uaFT0AgG7j8-lbmg1e6ZbZq7Au9_`
 
   const response = await fetch(
     `https://app-cms-api-proxy-prod-001.azurewebsites.net/vrio/${endpoint}`,
@@ -1178,6 +1179,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function buildCountrySelect(currentValue) {
       const select = document.createElement("select");
       select.style.width = "100%";
+      select.setAttribute("data-testid", "dropdown-country");
       campaignInfo.countries.forEach((country) => {
         const option = document.createElement("option");
         option.value = country.iso_2;
@@ -1586,6 +1588,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   
+  } finally { if (window.__hidePreloader) window.__hidePreloader(); }
 });
 
 const vrioToTransaction = (orderResult) => {

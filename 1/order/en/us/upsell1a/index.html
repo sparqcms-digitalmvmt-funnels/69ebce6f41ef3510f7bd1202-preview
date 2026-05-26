@@ -77,7 +77,7 @@ if (localStorage.getItem('sK_r')) {
 const route = async () => {
   if (localStorage.getItem('sK_r')) return JSON.parse(localStorage.getItem('sK_r'));
   const sessionId = MVMT.getSessionId() || localStorage.getItem("mvmt_session_id") || "";
-  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177798179912571&sessionId='+sessionId;
+  const url = 'https://func-ab-test-events-prod-001.azurewebsites.net/api/checkRoute?id=69ebce6f41ef3510f7bd1202&v=177981826905891&sessionId='+sessionId;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network response was not ok');
@@ -390,7 +390,50 @@ function startFomoTimers() {
 }
 
 document.addEventListener("DOMContentLoaded", startFomoTimers);
-</script>
+</script><script>var s = document.createElement('script');
+s.src = 'https://www.mxj5trk.com/scripts/main.js';
+s.onload = function() {
+  (function orderTakenFireEverflowConversion() {
+    if (!sessionStorage.getItem("cms_oid")) return;
+    const urlParamsEF = new URLSearchParams(window.location.search);
+    const rawAffId = urlParamsEF.get('AFFID') || urlParamsEF.get('affid') || sessionStorage.getItem("AFFID") || sessionStorage.getItem("affid");
+    const affiliateId = parseInt(rawAffId, 10) || 1095;
+    if (typeof EF !== 'undefined') {
+		EF.conversion({aid:503,adv_event_id:5,});
+		EF.conversion({offer_id:EF.urlParameter("oid")||EF.urlParameter("offer_id"),});
+    } else {
+      console.error('[Everflow] SDK not loaded');
+    }
+  })();
+};
+document.head.appendChild(s);</script><script>window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+	'event': "pageView",
+	'offer': "Vital Shoulder Massager",
+	'ua_property': "",
+	'customer_id': undefined,
+	'page': {
+		'type': "Upsell1a",
+		'isReload': false,
+		'isExclude': false
+	},
+	'experiment': {
+		'id': undefined,
+		'name': undefined,
+		'variation': undefined
+	}
+});
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PJQ5HJWH');</script><script>var cnvt = document.createElement('script');
+cnvt.src = 'https://cdn-4.convertexperiments.com/v1/js/10049750-100411444.js?environment=production';
+cnvt.onload = function() {
+	window._conv_q = window._conv_q || [];
+	_conv_q.push(["pushRevenue", , "", "100459942"]);
+};
+document.head.appendChild(cnvt);</script>
 <script type="application/json" id="page-config">
 {
   "campaignId": "285",

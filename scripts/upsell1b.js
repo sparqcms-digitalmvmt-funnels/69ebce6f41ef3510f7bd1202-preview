@@ -901,6 +901,7 @@ const getOrCreateVipAutoSkipScreen = () => {
   screen = document.createElement("div");
   screen.id = AUTO_SKIP_SCREEN_ID;
   screen.setAttribute("aria-live", "polite");
+  screen.setAttribute("data-testid", "autoskip-screen");
   screen.style.position = "fixed";
   screen.style.inset = "0";
   screen.style.zIndex = "9000";
@@ -911,6 +912,7 @@ const getOrCreateVipAutoSkipScreen = () => {
 
   const spinner = document.createElement("div");
   spinner.className = "loader";
+  spinner.setAttribute("data-testid", "autoskip-spinner");
   spinner.style.width = "48px";
   spinner.style.height = "48px";
   spinner.style.borderRadius = "50%";
@@ -1062,6 +1064,7 @@ const showToast = function(message, bg = "#333") {
     (() => {
       const div = document.createElement("div");
       div.id = "toast-container";
+      div.setAttribute("data-testid", "toast-container");
       div.style.position = "fixed";
       div.style.top = "10px";
       div.style.right = "10px";
@@ -1072,6 +1075,7 @@ const showToast = function(message, bg = "#333") {
 
   const toast = document.createElement("div");
   toast.className = "mytoast";
+  toast.setAttribute("data-testid", "toast");
   toast.textContent = message;
   toast.style.background = bg;
   toast.style.color = "#fff";
@@ -1306,7 +1310,7 @@ const processKlarnaUpsell = async () => {
         body: JSON.stringify({
           offers: offers.map((o) => JSON.stringify(o)),
           order_id: lastOrderId,
-          pageId: "rqA8zsZ3CZtmXJFoyODONYUfw2SE4__hAdij384dzeXXAnqpJ8jRvNCKPH1CpMqQ"
+          pageId: "iM48QhrmqKNq5d8teHfS1P7QeyJ6xuDQX_41-Z4xbLddom_vN_JeqvMmDy4Zay-g"
         })
       }
     );
@@ -1386,7 +1390,7 @@ const processUpsell = async () => {
   }
   try {
     const orderData = JSON.parse(sessionStorage.getItem("orderData"));
-    orderData.pageId = "rqA8zsZ3CZtmXJFoyODONYUfw2SE4__hAdij384dzeXXAnqpJ8jRvNCKPH1CpMqQ";
+    orderData.pageId = "iM48QhrmqKNq5d8teHfS1P7QeyJ6xuDQX_41-Z4xbLddom_vN_JeqvMmDy4Zay-g";
     const lastOrderId = sessionStorage.getItem("cms_oid");
     const stripePayment = JSON.parse(sessionStorage.getItem("stripePayment"));
     const isStripeTestOrder = stripePayment && !stripePayment.isLive;
@@ -1669,11 +1673,22 @@ const areAllProductsRecurring = () => {
 document.addEventListener("DOMContentLoaded", async () => {
   
 (function ensurePreloaderExists() {
-    if (document.querySelector('[data-preloader]')) return;
+    const existing = document.querySelector('[data-preloader]');
+    if (existing) {
+        if (!existing.getAttribute('data-testid')) {
+            existing.setAttribute('data-testid', 'preloader');
+        }
+        const spinner = existing.querySelector('.loader');
+        if (spinner && !spinner.getAttribute('data-testid')) {
+            spinner.setAttribute('data-testid', 'preloader-spinner');
+        }
+        return;
+    }
     const loaderOverlay = document.createElement('div');
     loaderOverlay.setAttribute('data-preloader', '');
+    loaderOverlay.setAttribute('data-testid', 'preloader');
     loaderOverlay.innerHTML = `
-        <div class="loader"></div>
+        <div class="loader" data-testid="preloader-spinner"></div>
         <p>${i18n.labels.processing}</p>
     `;
 
